@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="OPIA is a p5.js universe of loneliness, connection, and radical honesty.">
+  <title>OPIA — Atlas of Loneliness</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2307122d'/%3E%3Cpath d='M32 8l5.5 18.5L56 32l-18.5 5.5L32 56l-5.5-18.5L8 32l18.5-5.5z' fill='%23f6cf74'/%3E%3Ccircle cx='32' cy='32' r='5' fill='%23fff7d6'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="site-header">
+      <div class="brand-lockup">
+        <h1>OPIA</h1>
+        <p class="eyebrow">Atlas of Loneliness</p>
+      </div>
+      <button id="sound-toggle" class="sound-button" type="button" aria-pressed="false" aria-label="Turn sound on" title="Turn sound on">
+        <span aria-hidden="true">♪</span>
+      </button>
+    </header>
+
+    <section class="experience" aria-label="Loneliness data universe">
+      <div id="canvas-wrap" class="canvas-wrap">
+        <div id="p5-canvas" role="img" aria-label="A night sky containing age, identity, race, income, and location constellations"></div>
+      </div>
+
+      <details id="entry-drawer" class="entry-drawer">
+        <summary>Enter the constellation</summary>
+        <div class="entry-panel">
+          <label for="connection-slider">
+            How connected do you feel?
+            <span id="connection-value">50</span>
+          </label>
+          <input id="connection-slider" type="range" min="0" max="100" value="50">
+          <div class="range-labels"><span>alone</span><span>connected</span></div>
+
+          <label for="feeling-select">What feels closest?</label>
+          <select id="feeling-select">
+            <option>lonely</option>
+            <option>numb</option>
+            <option>anxious</option>
+            <option>grieving</option>
+            <option>hopeful</option>
+            <option>connected</option>
+            <option>something else</option>
+          </select>
+
+          <label for="age-select">Age</label>
+          <select id="age-select">
+            <option>18–34</option>
+            <option>35–49</option>
+            <option>50–64</option>
+            <option>65+</option>
+          </select>
+
+          <label for="identity-select">Identity point</label>
+          <select id="identity-select">
+            <option>Women</option>
+            <option>Men</option>
+            <option>Lesbian</option>
+            <option>Gay</option>
+            <option>Bisexual</option>
+            <option>Transgender woman</option>
+            <option>Transgender man</option>
+            <option>Gender nonconforming</option>
+          </select>
+
+          <label for="race-select">Race or ethnicity</label>
+          <select id="race-select">
+            <option>Black</option>
+            <option>Hispanic or Latino</option>
+            <option>Multiracial</option>
+            <option>American Indian / Alaska Native</option>
+            <option>Asian</option>
+            <option>White</option>
+          </select>
+
+          <label for="income-select">Household income</label>
+          <select id="income-select">
+            <option>Under $25K</option>
+            <option>$25K–$49K</option>
+            <option>$50K–$74K</option>
+            <option>$75K–$99K</option>
+            <option>$100K–$149K</option>
+            <option>$150K+</option>
+          </select>
+
+          <label for="location-select">Place</label>
+          <select id="location-select">
+            <option>City</option>
+            <option>Suburb</option>
+            <option>Small town</option>
+            <option>Rural area</option>
+          </select>
+
+          <label for="alias-input">Name or nickname</label>
+          <input id="alias-input" maxlength="30" placeholder="A name for your star" autocomplete="nickname">
+          <label for="city-input">City or town</label>
+          <input id="city-input" maxlength="60" placeholder="New York, Shanghai, Berlin…" autocomplete="address-level2">
+          <label for="country-input">Country</label>
+          <input id="country-input" maxlength="60" placeholder="United States, China, Germany…" autocomplete="country-name">
+          <label for="decade-select">Your age group in the galaxy</label>
+          <select id="decade-select"><option>18–29</option><option>30–39</option><option>40–49</option><option>50–59</option><option>60+</option><option>Prefer not to say</option></select>
+          <label for="truth-input">Take a moment to be radically honest. How do you really feel?</label>
+          <textarea id="truth-input" maxlength="180" rows="3" placeholder="The thing I haven’t said out loud is…"></textarea>
+
+          <p class="form-note"><em>No account needed.</em></p>
+          <p class="form-note">Your nickname, city, country, age group, feeling, and sentence will be visible to other visitors. Share only what you want others to read. Your other demographic answers stay private.</p>
+          <button id="enter-button" class="enter-button" type="button">Become a star</button>
+          <p id="entry-message" class="entry-message" role="status"></p>
+        </div>
+      </details>
+
+      <div class="aurora-key" aria-label="Aurora color guide: warm colors indicate greater loneliness and cool colors indicate greater connection">
+        <span>loneliness</span>
+        <i aria-hidden="true"></i>
+        <span>connection</span>
+      </div>
+
+      <a hidden class="source-note" href="https://www.cdc.gov/mmwr/volumes/73/wr/mm7324a1.htm" target="_blank" rel="noreferrer">CDC BRFSS · 2022 · 26 states</a>
+      <button id="return-galaxy" class="return-galaxy" hidden>Return to my galaxy</button>
+      <div id="galaxy-controls" hidden>
+        <button id="back-atlas">Back to the atlas</button>
+        <label>Gather by <select id="group-by" title="Gather stars by shared city and country, age group, or feeling. This is a constellation layout, not a geographic map."><option value="city">Place</option><option value="age">Age</option><option value="feeling">Feeling</option></select></label>
+        <button id="my-star">Find my star</button>
+        <button id="browse-stars">Read the stars</button>
+        <p id="galaxy-status" role="status"></p>
+      </div>
+      <button id="explore-galaxy" class="explore-galaxy">Explore the galaxy</button>
+      <dialog id="star-dialog">
+        <button class="close-dialog" aria-label="Close statement">×</button>
+        <p id="star-context" class="form-note"></p>
+        <h2 id="star-name"></h2>
+        <blockquote id="star-truth"></blockquote>
+        <button id="resonate-button">This resonates</button>
+        <div id="reply-list"></div>
+        <form id="reply-form">
+          <label for="reply-input">Leave a little kindness</label>
+          <textarea id="reply-input" maxlength="240" rows="3" required placeholder="Your words can meet theirs…"></textarea>
+          <button type="submit">Leave a reply</button>
+        </form>
+        <button id="delete-star" hidden>Remove my star</button>
+        <p id="reply-status" role="status"></p>
+      </dialog>
+      <dialog id="support-dialog" aria-labelledby="support-title">
+        <button class="close-dialog" aria-label="Close reference">×</button>
+        <p class="form-note">Published research · separate from participant contributions</p>
+        <h2 id="support-title">Emotional support</h2>
+        <p>Across 26 U.S. states in 2022, 24.1% of adults said their social and emotional support needs were met sometimes, rarely, or never.</p>
+        <p class="form-note">CDC BRFSS · 2022 survey data · report published in 2024</p>
+        <p><a href="https://www.cdc.gov/mmwr/volumes/73/wr/mm7324a1.htm" target="_blank" rel="noreferrer">Read the CDC report</a></p>
+      </dialog>
+      <dialog id="star-list-dialog"><button class="close-dialog" aria-label="Close star list">×</button><h2>Voices in the galaxy</h2><div id="star-list"></div></dialog>
+    </section>
+  </main>
+
+  <noscript>This constellation requires JavaScript.</noscript>
+  <script src="vendor/p5.min.js"></script>
+  <script src="vendor/p5.sound.min.js"></script>
+  <script src="config.js"></script>
+  <script src="sketch.js"></script>
+  <script src="galaxy.js"></script>
+</body>
+</html>
