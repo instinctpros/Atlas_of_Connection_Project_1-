@@ -21,7 +21,7 @@ export async function createStorage(localPath) {
       headers:{'Content-Type':'application/json','X-Access-Key':accessKey,'X-Bin-Versioning':'false'},
       body:data?JSON.stringify(data):undefined
     });
-    if(!response.ok)throw Error(`JSONBin returned ${response.status}. Check the bin ID, access-key permissions, and request allowance.`);
+   if (!response.ok) throw Error(`JSONBin ${response.status}: ${await response.text()}`);
     const result=await response.json();return result.record;
   }
   return {
