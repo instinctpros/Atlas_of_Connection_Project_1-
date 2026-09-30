@@ -8,7 +8,7 @@ import {existsSync} from 'node:fs';
 import {createStorage} from './storage.mjs';
 const root=dirname(fileURLToPath(import.meta.url));
 if(existsSync(join(root,'.env')))process.loadEnvFile(join(root,'.env'));
-const publicRoot=join(root,'public');
+const publicRoot=join(root,'..','public');
 const storePath=process.env.OPIA_STORE || join(root,'storage','galaxy.json');
 const port=Number(process.env.PORT||3000);
 const hash=value=>createHash('sha256').update(value).digest('hex');
